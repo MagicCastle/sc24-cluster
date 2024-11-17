@@ -7,19 +7,21 @@ variable "pool" {
   default = []
 }
 
-module "openstack" {
-  source         = "./openstack"
+module "aws" {
+  source         = "./aws"
   config_git_url = "https://github.com/ComputeCanada/puppet-magic_castle.git"
   config_version = "14.1.0"
 
   cluster_name = "phoenix"
   domain       = "calculquebec.cloud"
-  image        = "Rocky-9"
+  # Rocky Linux 9.4 -  ca-central-1
+  # https://rockylinux.org/download
+  image        = "ami-07fbc9d69b1aa88b9"
 
   instances = {
-    mgmt   = { type = "p4-6gb", tags = ["puppet", "mgmt", "nfs"], count = 1 }
-    login  = { type = "p2-3gb", tags = ["login", "public", "proxy"], count = 1 }
-    node   = { type = "p2-3gb", tags = ["node"], count = 1 }
+    mgmt  = { type = "t3.large",  count = 1, tags = ["mgmt", "puppet", "nfs"] },
+    login = { type = "t3.medium", count = 1, tags = ["login", "public", "proxy"] },
+    node  = { type = "t3.medium", count = 1, tags = ["node"] }
   }
 
   # var.pool is managed by Slurm through Terraform REST API.
@@ -30,33 +32,36 @@ module "openstack" {
 
   volumes = {
     nfs = {
-      home     = { size = 100 }
-      project  = { size = 50 }
-      scratch  = { size = 50 }
+      home     = { size = 10, type = "gp2" }
+      project  = { size = 50, type = "gp2" }
+      scratch  = { size = 50, type = "gp2" }
     }
   }
 
   public_keys = [file("~/.ssh/id_rsa.pub")]
 
-  nb_users = 10
+  nb_users     = 10
   # Shared password, randomly chosen if blank
   guest_passwd = ""
+
+  # AWS specifics
+  region            = "ca-central-1"
 }
 
 output "accounts" {
-  value = module.openstack.accounts
+  value = module.aws.accounts
 }
 
 output "public_ip" {
-  value = module.openstack.public_ip
+  value = module.aws.public_ip
 }
 
 ## Uncomment to register your domain name with CloudFlare
 # module "dns" {
 #   source           = "./dns/cloudflare"
-#   name             = module.openstack.cluster_name
-#   domain           = module.openstack.domain
-#   public_instances = module.openstack.public_instances
+#   name             = module.aws.cluster_name
+#   domain           = module.aws.domain
+#   public_instances = module.aws.public_instances
 # }
 
 ## Uncomment to register your domain name with Google Cloud
@@ -64,11 +69,11 @@ output "public_ip" {
 #   source           = "./dns/gcloud"
 #   project          = "your-project-id"
 #   zone_name        = "you-zone-name"
-#   name             = module.openstack.cluster_name
-#   domain           = module.openstack.domain
-#   public_instances = module.openstack.public_instances
+#   name             = module.aws.cluster_name
+#   domain           = module.aws.domain
+#   public_instances = module.aws.public_instances
 # }
 
 # output "hostnames" {
-#   value = module.dns.hostnames
+# 	value = module.dns.hostnames
 # }
