@@ -51,7 +51,7 @@ module "aws" {
   # AWS specifics
   region            = "ca-central-1"
 
-  eyaml_key = var.eyaml_key
+  eyaml_key = base64decode(var.eyaml_key)
 }
 
 output "accounts" {
