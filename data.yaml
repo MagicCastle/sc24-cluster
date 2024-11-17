@@ -11,7 +11,7 @@ jupyterhub::jupyterhub_config_hash:
   SlurmSpawner:
     req_srun: ''
     req_account: "def-sponsor00"
-    req_memory: "512"
+    req_memory: "1000"
     req_nprocs: "1"
     req_runtime: "08:00:00"
     req_options: "--oversubscribe"
