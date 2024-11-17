@@ -63,12 +63,12 @@ output "public_ip" {
 }
 
 ## Uncomment to register your domain name with CloudFlare
-# module "dns" {
-#   source           = "./dns/cloudflare"
-#   name             = module.aws.cluster_name
-#   domain           = module.aws.domain
-#   public_instances = module.aws.public_instances
-# }
+module "dns" {
+  source           = "./dns/cloudflare"
+  name             = module.aws.cluster_name
+  domain           = module.aws.domain
+  public_instances = module.aws.public_instances
+}
 
 ## Uncomment to register your domain name with Google Cloud
 # module "dns" {
