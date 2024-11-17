@@ -25,6 +25,7 @@ module "aws" {
     login = { type = "t3.xlarge", count = 1, tags = ["login", "public"], disk_size = 100 },
     proxy = { type = "t3.medium", count = 1, tags = ["proxy", "public"] },
     node  = { type = "t3.large", count = 1, tags = ["node"] },
+    pool  = { type = "t3.large", count = 10, tags = ["node", "pool"] },
   }
 
   # var.pool is managed by Slurm through Terraform REST API.
@@ -80,6 +81,6 @@ module "dns" {
 #   public_instances = module.aws.public_instances
 # }
 
-# output "hostnames" {
-# 	value = module.dns.hostnames
-# }
+output "hostnames" {
+  value = module.dns.hostnames
+}
