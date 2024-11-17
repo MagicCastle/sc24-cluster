@@ -1,3 +1,21 @@
 ---
 profile::slurm::controller::tfe_token: ENC[PKCS7,MIICIgYJKoZIhvcNAQcDoIICEzCCAg8CAQAxggF5MIIBdQIBADBdMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQCFCxBeRoR4IbkJ4iam79I6GnVY1CXMA0GCSqGSIb3DQEBAQUABIIBAE1cyS6aDJ9kNAfKWlLFP+nxMD2kpfQ/oIHh4ND4d8MyXk0AMwaE7JbkFuIIi/3fz+iJVCfDFAWMsccgiJfGSZseqJYWmmOYunjUAfQ7RfilgpacCLD3wcglP+QO36EOC+uBxFoZTkIoITdGqCIw7SFWoPrFlOxkWSaZLG7/UVh2QKzt5GDM+9skBpkw7CLN3cLpRw7ejcyqj6l2xm7SuEsnPJYY6yQQbQqWUukKq+nYGbfug0ZXTHzpJgSM+2/ANHxKGIL8ejT0eCYPPNCPLSZjBVKI5/eVveUwufFgj5gIoWpRQ0cyDnLrsHB28PoB0krQQz362doumuvsI3Tw9FYwgYwGCSqGSIb3DQEHATAdBglghkgBZQMEASoEEE0AEpPmFywxhqtupB69Y6eAYKHQX+knLRS6IFWnJtE7fTV6yQJ6OIsXdjwEkvUvDy0+14mY1yBvNDW41k1HGo7hfZL1K8kqDCNC2VrjJj+AGtlG0atKXgrR7E1q1v+XqjcMH5qbvORQaUafeB5/r32WyA==]
 profile::slurm::controller::tfe_workspace: ENC[PKCS7,MIIB4QYJKoZIhvcNAQcDoIIB0jCCAc4CAQAxggF5MIIBdQIBADBdMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQCFCxBeRoR4IbkJ4iam79I6GnVY1CXMA0GCSqGSIb3DQEBAQUABIIBADZDTtMxK+40dXaX0ZSoSWMnmK7X8bL6GbxVrlcZkyNM7y9a60fwTJGVId902Psiitk54P3lTnSNug60aaXM3ihR5ygSkShXrHrw3Ry/6ZwAIMQaPnoCoL5f+3m8HP+J/K/pH2/OWQ6r1yfG0qpQ41SkK87WHTOguT3Yxt9OivPx69ndnsbx64QkPNqxHi4hJ7jXr2JPdSu31YRMKLhTMRC75b7nCQPPUY868iJPoF7clTQjYz8sgv759fd1iynhkpVJ8UkrbSwIJVx2uFxsqCZ5xJdB8g2aWrMvkVv2sJct3ozpzfRTKBpLGaiNaRZ7jDh+aFlEj5+KOpedpUcl/OAwTAYJKoZIhvcNAQcBMB0GCWCGSAFlAwQBKgQQbDxGM4LQmBkgMRmQ7WIaBIAg7gIjNRGR5fzfvoVS/eoruDu487FM94lyCuQYKEt+m/M=]
+
+profile::accounts::manage_scratch: false
+profile::accounts::manage_project: false
+
+jupyterhub::spawner_class: "batchspawner.SlurmSpawner"
+
+jupyterhub::jupyterhub_config_hash:
+  SlurmSpawner:
+    req_srun: ''
+    req_account: "def-sponsor00"
+    req_memory: "512"
+    req_nprocs: "1"
+    req_runtime: "08:00:00"
+    req_options: "--oversubscribe"
+
+profile::slurm::base::slurm_version: '24.05'
+profile::fail2ban::ignoreip: ['140.221.0.0/16']
+
