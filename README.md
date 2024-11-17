@@ -1,4 +1,4 @@
-# Amazon Web Services
+# Magic Castle Supercomputing 24 tutorial infrastructure
 
 Refer to [Magic Castle Documentation](https://github.com/ComputeCanada/magic_castle/tree/main/docs) for a complete step-by-step guide.
 

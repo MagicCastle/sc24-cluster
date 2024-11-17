@@ -12,16 +12,17 @@ module "aws" {
   config_git_url = "https://github.com/ComputeCanada/puppet-magic_castle.git"
   config_version = "14.1.0"
 
-  cluster_name = "phoenix"
-  domain       = "calculquebec.cloud"
+  cluster_name = "sc24"
+  domain       = "magiccastle.live"
   # Rocky Linux 9.4 -  ca-central-1
   # https://rockylinux.org/download
   image        = "ami-07fbc9d69b1aa88b9"
 
   instances = {
-    mgmt  = { type = "t3.large",  count = 1, tags = ["mgmt", "puppet", "nfs"] },
-    login = { type = "t3.medium", count = 1, tags = ["login", "public", "proxy"] },
-    node  = { type = "t3.medium", count = 1, tags = ["node"] }
+    mgmt  = { type = "t3.large",  count = 1, tags = ["mgmt", "puppet", "nfs"], disk_size = 100 },
+    login = { type = "t3.xlarge", count = 1, tags = ["login", "public"], disk_size = 100 },
+    proxy = { type = "t3.medium", count = 1, tags = ["proxy", "public"] },
+    node  = { type = "t3.large", count = 1, tags = ["node"] },
   }
 
   # var.pool is managed by Slurm through Terraform REST API.
@@ -32,17 +33,18 @@ module "aws" {
 
   volumes = {
     nfs = {
-      home     = { size = 10, type = "gp2" }
-      project  = { size = 50, type = "gp2" }
-      scratch  = { size = 50, type = "gp2" }
+      home     = { size = 100, type = "gp2" }
     }
   }
 
-  public_keys = [file("~/.ssh/id_rsa.pub")]
+  public_keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBblyJ+6JynjS7kxzawodNvRrOTGVGj7266zcFJuq01N 1password_ed25519",
+  ]
 
-  nb_users     = 10
+  nb_users     = 50
   # Shared password, randomly chosen if blank
   guest_passwd = ""
+  hieradata = file("data.yaml")
 
   # AWS specifics
   region            = "ca-central-1"
