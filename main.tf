@@ -12,17 +12,17 @@ variable "eyaml_key" { }
 module "aws" {
   source         = "./aws"
   config_git_url = "https://github.com/ComputeCanada/puppet-magic_castle.git"
-  config_version = "14.1.0"
+  config_version = "14.1.2"
 
-  cluster_name = "sc24"
+  cluster_name = "test"
   domain       = "magiccastle.live"
   # Rocky Linux 9.4 -  ca-central-1
   # https://rockylinux.org/download
   image        = "ami-07fbc9d69b1aa88b9"
 
   instances = {
-    mgmt  = { type = "t3.large",  count = 1, tags = ["mgmt", "puppet", "nfs"], disk_size = 100 },
-    login = { type = "t3.xlarge", count = 1, tags = ["login", "public"], disk_size = 100 },
+    mgmt  = { type = "t3.large",  count = 1, tags = ["mgmt", "puppet", "nfs"], disk_size = 30 },
+    login = { type = "t3.xlarge", count = 1, tags = ["login", "public"], disk_size = 30 },
     proxy = { type = "t3.medium", count = 1, tags = ["proxy", "public"] },
     node  = { type = "t3.large", count = 1, tags = ["node"] },
     pool  = { type = "t3.large", count = 10, tags = ["node", "pool"], image = "ami-0a59ab63bd9c943b8" },
@@ -36,7 +36,7 @@ module "aws" {
 
   volumes = {
     nfs = {
-      home     = { size = 100, type = "gp2" }
+      home     = { size = 10, type = "gp2" }
     }
   }
 
